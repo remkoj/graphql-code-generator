@@ -296,7 +296,8 @@ export class ClientSideBaseVisitor<
 
   protected _extractFragments(
     document: FragmentDefinitionNode | OperationDefinitionNode,
-    withNested = false
+    withNested = false,
+    ignoredFragments?: Set<string>
   ): string[] {
     if (!document) {
       return [];
@@ -307,13 +308,14 @@ export class ClientSideBaseVisitor<
     oldVisit(document, {
       enter: {
         FragmentSpread: (node: FragmentSpreadNode) => {
+          if (ignoredFragments?.has(node.name.value)) return;
           names.add(node.name.value);
 
           if (withNested) {
             const foundFragment = this._fragments.get(node.name.value);
 
             if (foundFragment) {
-              const childItems = this._extractFragments(foundFragment.node, true);
+              const childItems = this._extractFragments(foundFragment.node, true, names);
 
               if (childItems && childItems.length > 0) {
                 for (const item of childItems) {
