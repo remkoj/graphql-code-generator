@@ -627,11 +627,13 @@ export const getFieldNames = ({
   fieldNames = new Set(),
   parentName = '',
   loadedFragments,
+  seenFragments = [],
 }: {
   selections: readonly SelectionNode[];
   fieldNames?: Set<string>;
   parentName?: string;
   loadedFragments: LoadedFragment[];
+  seenFragments?: string[];
 }) => {
   for (const selection of selections) {
     switch (selection.kind) {
@@ -644,11 +646,14 @@ export const getFieldNames = ({
             fieldNames,
             parentName: fieldName,
             loadedFragments,
+            seenFragments,
           });
         }
         break;
       }
       case Kind.FRAGMENT_SPREAD: {
+        if (seenFragments.includes(selection.name.value)) break;
+        seenFragments.push(selection.name.value);
         getFieldNames({
           selections: loadedFragments
             .filter(def => def.name === selection.name.value)
@@ -656,11 +661,18 @@ export const getFieldNames = ({
           fieldNames,
           parentName,
           loadedFragments,
+          seenFragments,
         });
         break;
       }
       case Kind.INLINE_FRAGMENT: {
-        getFieldNames({ selections: selection.selectionSet.selections, fieldNames, parentName, loadedFragments });
+        getFieldNames({
+          selections: selection.selectionSet.selections,
+          fieldNames,
+          parentName,
+          loadedFragments,
+          seenFragments,
+        });
         break;
       }
     }
