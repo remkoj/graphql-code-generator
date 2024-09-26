@@ -304,18 +304,20 @@ export class ClientSideBaseVisitor<
     }
 
     const names: Set<string> = new Set();
+    const toExclude = ignoredFragments || new Set<string>();
 
     oldVisit(document, {
       enter: {
         FragmentSpread: (node: FragmentSpreadNode) => {
-          if (ignoredFragments?.has(node.name.value)) return;
+          if (toExclude.has(node.name.value)) return;
           names.add(node.name.value);
+          toExclude.add(node.name.value);
 
           if (withNested) {
             const foundFragment = this._fragments.get(node.name.value);
 
             if (foundFragment) {
-              const childItems = this._extractFragments(foundFragment.node, true, names);
+              const childItems = this._extractFragments(foundFragment.node, true, toExclude);
 
               if (childItems && childItems.length > 0) {
                 for (const item of childItems) {
