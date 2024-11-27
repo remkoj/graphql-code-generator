@@ -127,11 +127,13 @@ export const preset: Types.OutputPreset<ClientPresetConfig> = {
       skipTypename: options.config.skipTypename,
       arrayInputCoercion: options.config.arrayInputCoercion,
       enumsAsTypes: options.config.enumsAsTypes,
+      enumsAsConst: options.config.enumsAsConst,
       futureProofEnums: options.config.futureProofEnums,
       dedupeFragments: options.config.dedupeFragments,
       nonOptionalTypename: options.config.nonOptionalTypename,
       avoidOptionals: options.config.avoidOptionals,
       documentMode: options.config.documentMode,
+      skipTypeNameForRoot: options.config.skipTypeNameForRoot,
     };
 
     const visitor = new ClientSideBaseVisitor(options.schemaAst!, [], options.config, options.config);
@@ -211,12 +213,7 @@ export const preset: Types.OutputPreset<ClientPresetConfig> = {
 
     const plugins: Array<Types.ConfiguredPlugin> = [
       { [`add`]: { content: `/* eslint-disable */` } },
-      {
-        [`typescript`]: {
-          onlyEnumTypes: true,
-          onlyOperationTypes: true,
-        },
-      },
+      { [`typescript`]: {} },
       { [`typescript-operations`]: {} },
       {
         [`typed-document-node`]: {

@@ -1,5 +1,36 @@
 # @graphql-codegen/client-preset
 
+## 4.5.1
+
+### Patch Changes
+
+- [#9981](https://github.com/dotansimha/graphql-code-generator/pull/9981) [`05aa6b4`](https://github.com/dotansimha/graphql-code-generator/commit/05aa6b4cee6214674b25c9d20df27ce5e0e3927c) Thanks [@azu](https://github.com/azu)! - The client preset now allows the use of the `enumsAsConst` config option
+
+- Updated dependencies [[`1617e3c`](https://github.com/dotansimha/graphql-code-generator/commit/1617e3cf38f3059cc5ea88b540033f521f03725a), [`fa64fbf`](https://github.com/dotansimha/graphql-code-generator/commit/fa64fbf8a44e1cee7ae17806dcd178dc7350c4ba)]:
+  - @graphql-codegen/visitor-plugin-common@5.6.0
+  - @graphql-codegen/typescript-operations@4.4.0
+  - @graphql-codegen/gql-tag-operations@4.0.12
+  - @graphql-codegen/typed-document-node@5.0.12
+  - @graphql-codegen/typescript@4.1.2
+
+## 4.5.0
+
+### Minor Changes
+
+- [#10136](https://github.com/dotansimha/graphql-code-generator/pull/10136) [`3fd4486`](https://github.com/dotansimha/graphql-code-generator/commit/3fd4486a548c27099377c7bd696a22d1638227f4) Thanks [@wxt2005](https://github.com/wxt2005)! - foward skipTypeNameForRoot to client-preset
+
+### Patch Changes
+
+- [#10182](https://github.com/dotansimha/graphql-code-generator/pull/10182) [`effd875`](https://github.com/dotansimha/graphql-code-generator/commit/effd875b205fa9c5a99ce5e7fcdeb86cea7723fc) Thanks [@eddeee888](https://github.com/eddeee888)! - Revert slimmer client preset output
+
+- Updated dependencies [[`55a1e9e`](https://github.com/dotansimha/graphql-code-generator/commit/55a1e9e63830df17ed40602ea7e322bbf48b17bc), [`a235051`](https://github.com/dotansimha/graphql-code-generator/commit/a23505180ac2f275a55ece27162ec9bfcdc52e03), [`c7af639`](https://github.com/dotansimha/graphql-code-generator/commit/c7af63964089938150402db69d49f11f93bb5175)]:
+  - @graphql-codegen/visitor-plugin-common@5.5.0
+  - @graphql-codegen/plugin-helpers@5.1.0
+  - @graphql-codegen/typed-document-node@5.0.11
+  - @graphql-codegen/gql-tag-operations@4.0.11
+  - @graphql-codegen/typescript-operations@4.3.1
+  - @graphql-codegen/typescript@4.1.1
+
 ## 4.4.0
 
 ### Minor Changes
