@@ -1,0 +1,18 @@
+diff --git a/node_modules/bob-the-bundler/dist/utils/get-workspace-package-paths.js b/node_modules/bob-the-bundler/dist/utils/get-workspace-package-paths.js
+index 7510c02..6e2d672 100644
+--- a/node_modules/bob-the-bundler/dist/utils/get-workspace-package-paths.js
++++ b/node_modules/bob-the-bundler/dist/utils/get-workspace-package-paths.js
+@@ -2,10 +2,11 @@ import path from 'path';
+ import { globby } from 'globby';
+ import { buildArtifactDirectories } from '../constants.js';
+ export async function getWorkspacePackagePaths(workspaces, cwd = process.cwd()) {
+-    const packageJSONPaths = await globby(workspaces
++    const wsPaths = workspaces
+         /** We are only interested in workspaces that are packages (for now.) */
+         .filter(workspacePattern => workspacePattern.startsWith('packages/'))
+-        .map(workspacePattern => path.join(workspacePattern, 'package.json')), {
++        .map(workspacePattern => path.join(workspacePattern, 'package.json').replaceAll(path.sep, path.posix.sep))
++    const packageJSONPaths = await globby(wsPaths, {
+         cwd,
+         ignore: ['**/node_modules/**', ...buildArtifactDirectories],
+     });
