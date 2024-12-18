@@ -306,6 +306,12 @@ export class ClientSideBaseVisitor<
     const names: Set<string> = new Set();
     const toExclude = ignoredFragments || new Set<string>();
 
+    // We're trying to prevent both duplicate fragments and endless loops, hence
+    // if the current document is a fragment, we must not list it in the
+    // fragments being used.
+    if (document.kind === Kind.FRAGMENT_DEFINITION && !toExclude.has(document.name.value))
+      toExclude.add(document.name.value);
+
     oldVisit(document, {
       enter: {
         FragmentSpread: (node: FragmentSpreadNode) => {
