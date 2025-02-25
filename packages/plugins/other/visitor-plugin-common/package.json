@@ -9,7 +9,8 @@
   },
   "scripts": {
     "lint": "eslint **/*.ts",
-    "test": "jest --no-watchman --config ../../../../jest.config.js"
+    "test": "jest --no-watchman --config ../../../../jest.config.js",
+    "dev:pack": "yarn pack --filename ../../../../dist/graphql-codegen-visitor-plugin-common-v-patched.tgz"
   },
   "dependencies": {
     "@graphql-tools/optimize": "^2.0.0",
