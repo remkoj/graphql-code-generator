@@ -1,5 +1,27 @@
 # @graphql-codegen/visitor-plugin-common
 
+## 5.7.1
+
+### Patch Changes
+
+- [#10302](https://github.com/dotansimha/graphql-code-generator/pull/10302) [`d8566c0`](https://github.com/dotansimha/graphql-code-generator/commit/d8566c015943ea4dbcaeaf57d3d8406553ae230a) Thanks [@eddeee888](https://github.com/eddeee888)! - Fix Apollo unmask directive incorrectly generating fragmentRefs
+
+## 5.7.0
+
+### Minor Changes
+
+- [#10270](https://github.com/dotansimha/graphql-code-generator/pull/10270) [`6d7c1d7`](https://github.com/dotansimha/graphql-code-generator/commit/6d7c1d7c0a4662acdc0efafd4234229ad0a8dd3c) Thanks [@adapap](https://github.com/adapap)! - feat: implement `includeExternalFragments: boolean` option
+
+## 5.6.1
+
+### Patch Changes
+
+- [#10230](https://github.com/dotansimha/graphql-code-generator/pull/10230) [`60dd72f`](https://github.com/dotansimha/graphql-code-generator/commit/60dd72fb103fd7fd70b4e1def98da29588865517) Thanks [@eddeee888](https://github.com/eddeee888)! - Fix generateInternalResolversIfNeeded.\_\_resolveReference making the resolver required
+
+  `__resolveReference`'s default behaviour when not declared is to pass the ref to subsequent resolvers i.e. becoming the `parent`. So, it means we don't have to make this resolver required.
+
+  This patch makes `__resolveReference` optional when `generateInternalResolversIfNeeded.__resolveReference` is set to true.
+
 ## 5.6.0
 
 ### Minor Changes

@@ -568,7 +568,7 @@ export class ClientSideBaseVisitor<
     const graph = this.fragmentsGraph;
     const orderedDeps = graph.overallOrder();
     const localFragments = orderedDeps
-      .filter(name => !graph.getNodeData(name).isExternal)
+      .filter(name => !graph.getNodeData(name).isExternal || this.config.includeExternalFragments)
       .map(name => this._generateFragment(graph.getNodeData(name).node));
 
     return localFragments.join('\n');

@@ -1,5 +1,61 @@
 # @graphql-codegen/client-preset
 
+## 4.6.4
+
+### Patch Changes
+
+- [#10302](https://github.com/dotansimha/graphql-code-generator/pull/10302) [`d8566c0`](https://github.com/dotansimha/graphql-code-generator/commit/d8566c015943ea4dbcaeaf57d3d8406553ae230a) Thanks [@eddeee888](https://github.com/eddeee888)! - Fix Apollo unmask directive incorrectly generating fragmentRefs
+
+- Updated dependencies [[`d8566c0`](https://github.com/dotansimha/graphql-code-generator/commit/d8566c015943ea4dbcaeaf57d3d8406553ae230a)]:
+  - @graphql-codegen/visitor-plugin-common@5.7.1
+  - @graphql-codegen/typescript-operations@4.5.1
+  - @graphql-codegen/gql-tag-operations@4.0.16
+  - @graphql-codegen/typed-document-node@5.0.15
+  - @graphql-codegen/typescript@4.1.5
+
+## 4.6.3
+
+### Patch Changes
+
+- [#10298](https://github.com/dotansimha/graphql-code-generator/pull/10298) [`3efc472`](https://github.com/dotansimha/graphql-code-generator/commit/3efc472b970754b05b1e1f9fe7d33cfa5ec65455) Thanks [@dotansimha](https://github.com/dotansimha)! - Fix a bug where fragment spreads with `@client` directives is not being removed from the generated persisted documents
+
+- Updated dependencies [[`6d7c1d7`](https://github.com/dotansimha/graphql-code-generator/commit/6d7c1d7c0a4662acdc0efafd4234229ad0a8dd3c)]:
+  - @graphql-codegen/visitor-plugin-common@5.7.0
+  - @graphql-codegen/typescript-operations@4.5.0
+  - @graphql-codegen/gql-tag-operations@4.0.15
+  - @graphql-codegen/typed-document-node@5.0.14
+  - @graphql-codegen/typescript@4.1.4
+
+## 4.6.2
+
+### Patch Changes
+
+- [#10280](https://github.com/dotansimha/graphql-code-generator/pull/10280) [`6da52a3`](https://github.com/dotansimha/graphql-code-generator/commit/6da52a3248c0ac9ef32140d130ac3da6fcaa1445) Thanks [@konomae](https://github.com/konomae)! - fix `onlyEnums` passthrough in client-preset
+
+## 4.6.1
+
+### Patch Changes
+
+- Updated dependencies [[`ec07018`](https://github.com/dotansimha/graphql-code-generator/commit/ec070189a1a3c4d41f2457b56a68b506c81f28ba)]:
+  - @graphql-codegen/gql-tag-operations@4.0.14
+
+## 4.6.0
+
+### Minor Changes
+
+- [#10268](https://github.com/dotansimha/graphql-code-generator/pull/10268) [`8737dd8`](https://github.com/dotansimha/graphql-code-generator/commit/8737dd86b4ce3d14234a515fa494736bf7ec35dd) Thanks [@eddeee888](https://github.com/eddeee888)! - Forward customDirectives to support Apollo unmask
+
+- [#10155](https://github.com/dotansimha/graphql-code-generator/pull/10155) [`ed71811`](https://github.com/dotansimha/graphql-code-generator/commit/ed71811ace083be61c575609e361c629ed7c1740) Thanks [@nebbles](https://github.com/nebbles)! - client-preset generated output is configurable with onlyOperationTypes and onlyEnumTypes
+
+### Patch Changes
+
+- Updated dependencies [[`60dd72f`](https://github.com/dotansimha/graphql-code-generator/commit/60dd72fb103fd7fd70b4e1def98da29588865517)]:
+  - @graphql-codegen/visitor-plugin-common@5.6.1
+  - @graphql-codegen/gql-tag-operations@4.0.13
+  - @graphql-codegen/typescript-operations@4.4.1
+  - @graphql-codegen/typed-document-node@5.0.13
+  - @graphql-codegen/typescript@4.1.3
+
 ## 4.5.1
 
 ### Patch Changes
@@ -566,7 +622,7 @@
   import { CodegenConfig } from '@graphql-codegen/cli'
 
   const config: CodegenConfig = {
-    schema: 'https://swapi-graphql.netlify.app/.netlify/functions/index',
+    schema: 'https://graphql.org/graphql/',
     documents: ['src/**/*.tsx'],
     ignoreNoDocuments: true, // for better experience with the watcher
     generates: {
@@ -614,7 +670,7 @@
   import { CodegenConfig } from '@graphql-codegen/cli'
 
   const config: CodegenConfig = {
-    schema: 'https://swapi-graphql.netlify.app/.netlify/functions/index',
+    schema: 'https://graphql.org/graphql/',
     documents: ['src/**/*.tsx'],
     ignoreNoDocuments: true, // for better experience with the watcher
     generates: {
