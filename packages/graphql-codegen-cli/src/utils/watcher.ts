@@ -64,9 +64,9 @@ export const createWatcher = (
     let parcelWatcher: typeof import('@parcel/watcher');
     try {
       parcelWatcher = await import('@parcel/watcher');
-    } catch (err) {
+    } catch {
       log(
-        `Failed to import @parcel/watcher due to the following error (to use watch mode, install https://www.npmjs.com/package/@parcel/watcher):\n${err}`
+        'Failed to import @parcel/watcher.\n  To use watch mode, install https://www.npmjs.com/package/@parcel/watcher.'
       );
       return;
     }
@@ -78,7 +78,10 @@ export const createWatcher = (
     const debouncedExec = debounce(() => {
       if (!isShutdown) {
         executeCodegen(initialContext)
-          .then(onNext, () => Promise.resolve())
+          .then(
+            ({ result }) => onNext(result),
+            () => Promise.resolve()
+          )
           .then(() => emitWatching(watchDirectory));
       }
     }, 100);
@@ -198,7 +201,10 @@ export const createWatcher = (
    */
   stopWatching.runningWatcher = new Promise<void>((resolve, reject) => {
     executeCodegen(initialContext)
-      .then(onNext, () => Promise.resolve())
+      .then(
+        ({ result }) => onNext(result),
+        () => Promise.resolve()
+      )
       .then(() => runWatcher(abortController.signal))
       .catch(err => {
         watcherSubscription.unsubscribe();

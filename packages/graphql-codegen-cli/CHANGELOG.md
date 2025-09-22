@@ -1,5 +1,44 @@
 # @graphql-codegen/cli
 
+## 6.0.0
+
+### Major Changes
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Drop @graphql-tools/prisma-loader
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Add `allowPartialOutputs` flag to partially write successful generation to files
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Migrate inquirer to @inquirer/prompts
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Bump dependencies major versions:
+
+  - cosmiconfig v9
+  - debounce v2
+  - jiti v2.3
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Bump listr2 to v9
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Drop Node 18 support
+
+### Patch Changes
+
+- Updated dependencies [[`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2)]:
+  - @graphql-codegen/plugin-helpers@6.0.0
+  - @graphql-codegen/client-preset@5.0.0
+  - @graphql-codegen/core@5.0.0
+
+## 5.0.7
+
+### Patch Changes
+
+- [#10150](https://github.com/dotansimha/graphql-code-generator/pull/10150) [`e324382`](https://github.com/dotansimha/graphql-code-generator/commit/e3243824cfe0d7ab463cf0d5a6455715510959be) Thanks [@ArminWiebigke](https://github.com/ArminWiebigke)! - Allow functions to be passed as valid values for `UrlSchemaOptions.customFetch`. This was already possible, but the type definitions did not reflect that correctly.
+
+- [#10358](https://github.com/dotansimha/graphql-code-generator/pull/10358) [`157c823`](https://github.com/dotansimha/graphql-code-generator/commit/157c8236320f00b06c470e2289315179119d4504) Thanks [@eddeee888](https://github.com/eddeee888)! - Remove extraneous error stacktrace if fails to load `@parcel/watcher`
+
+- Updated dependencies [[`e324382`](https://github.com/dotansimha/graphql-code-generator/commit/e3243824cfe0d7ab463cf0d5a6455715510959be), [`98392fc`](https://github.com/dotansimha/graphql-code-generator/commit/98392fc5d91035b5b5b0ffdefd78d0398762a523)]:
+  - @graphql-codegen/plugin-helpers@5.1.1
+  - @graphql-codegen/client-preset@4.8.2
+
 ## 5.0.6
 
 ### Patch Changes

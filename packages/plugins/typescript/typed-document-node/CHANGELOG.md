@@ -1,5 +1,25 @@
 # @graphql-codegen/typed-document-node
 
+## 6.0.0
+
+### Major Changes
+
+- [#10218](https://github.com/dotansimha/graphql-code-generator/pull/10218) [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2) Thanks [@eddeee888](https://github.com/eddeee888)! - Drop Node 18 support
+
+### Patch Changes
+
+- Updated dependencies [[`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2), [`140298a`](https://github.com/dotansimha/graphql-code-generator/commit/140298a33b257a0b7958e361971b5bc97bbc01c2)]:
+  - @graphql-codegen/visitor-plugin-common@6.0.0
+  - @graphql-codegen/plugin-helpers@6.0.0
+
+## 5.1.2
+
+### Patch Changes
+
+- [#10362](https://github.com/dotansimha/graphql-code-generator/pull/10362) [`3188b8c`](https://github.com/dotansimha/graphql-code-generator/commit/3188b8c39e9fd24e3dbbd0bcc8767052153eb399) Thanks [@Brookke](https://github.com/Brookke)! - Make generated type compatible with noImplicitOverride=true
+
+- [#10373](https://github.com/dotansimha/graphql-code-generator/pull/10373) [`c3295f9`](https://github.com/dotansimha/graphql-code-generator/commit/c3295f9c60383e5631ccc4080bc28e7c00a4d61b) Thanks [@eddeee888](https://github.com/eddeee888)! - Fix client preset not working with exactOptionalPropertyTypes=true when documentMode=string
+
 ## 5.1.1
 
 ### Patch Changes

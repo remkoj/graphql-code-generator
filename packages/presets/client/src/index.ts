@@ -132,8 +132,8 @@ export const preset: Types.OutputPreset<ClientPresetConfig> = {
       arrayInputCoercion: options.config.arrayInputCoercion,
       enumsAsTypes: options.config.enumsAsTypes,
       enumsAsConst: options.config.enumsAsConst,
+      enumValues: options.config.enumValues,
       futureProofEnums: options.config.futureProofEnums,
-      dedupeFragments: options.config.dedupeFragments,
       nonOptionalTypename: options.config.nonOptionalTypename,
       avoidOptionals: options.config.avoidOptionals,
       documentMode: options.config.documentMode,
@@ -220,7 +220,11 @@ export const preset: Types.OutputPreset<ClientPresetConfig> = {
 
     const plugins: Array<Types.ConfiguredPlugin> = [
       { [`add`]: { content: `/* eslint-disable */` } },
-      { [`typescript`]: {} },
+      {
+        [`typescript`]: {
+          inputMaybeValue: 'T | null | undefined',
+        },
+      },
       { [`typescript-operations`]: {} },
       {
         [`typed-document-node`]: {
