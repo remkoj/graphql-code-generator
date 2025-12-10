@@ -1,5 +1,58 @@
 # @graphql-codegen/typed-document-node
 
+## 6.1.4
+
+### Patch Changes
+
+- Updated dependencies [[`b995ed1`](https://github.com/dotansimha/graphql-code-generator/commit/b995ed13a49379ea05e0e313fac68b557527523a)]:
+  - @graphql-codegen/visitor-plugin-common@6.2.1
+
+## 6.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`f821e8a`](https://github.com/dotansimha/graphql-code-generator/commit/f821e8ab9351f23a9f7e5d5e6fc69c8e8868cad8), [`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670)]:
+  - @graphql-codegen/visitor-plugin-common@6.2.0
+  - @graphql-codegen/plugin-helpers@6.1.0
+
+## 6.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`51a1a72`](https://github.com/dotansimha/graphql-code-generator/commit/51a1a7280578d43681391df11d320a8416c0b41d)]:
+  - @graphql-codegen/visitor-plugin-common@6.1.2
+
+## 6.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`6715330`](https://github.com/dotansimha/graphql-code-generator/commit/67153304646694d75aee24afd70c3fce12e9f1f2)]:
+  - @graphql-codegen/visitor-plugin-common@6.1.1
+
+## 6.1.0
+
+### Minor Changes
+
+- [#10456](https://github.com/dotansimha/graphql-code-generator/pull/10456) [`655b91d`](https://github.com/dotansimha/graphql-code-generator/commit/655b91dd6d8b5f90eb26cd59d6a3d12c3dccc529) Thanks [@aovens-quantifi](https://github.com/aovens-quantifi)! - feat(typed-document-node): Allow importing operation types
+
+  Adds the `importOperationTypesFrom` option, similar to many other codegen
+  plugins. This allows importing the operation types rather than needing to
+  generate them within this plugin config.
+
+## 6.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`8258f1f`](https://github.com/dotansimha/graphql-code-generator/commit/8258f1f6012c106d02ef28bca9ec424f70c4aa26)]:
+  - @graphql-codegen/visitor-plugin-common@6.1.0
+
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [[`accdab6`](https://github.com/dotansimha/graphql-code-generator/commit/accdab69106605241933e9d66d64dc7077656f30)]:
+  - @graphql-codegen/visitor-plugin-common@6.0.1
+
 ## 6.0.0
 
 ### Major Changes

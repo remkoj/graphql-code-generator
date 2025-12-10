@@ -34,7 +34,7 @@ describe('Integration', () => {
   test('should not duplicate type even if type and extend type are in the same module', async () => {
     const { result } = await executeCodegen(options);
 
-    const userResolversStr = `export type UserResolvers = Pick<Types.UserResolvers, DefinedFields['User'] | '__isTypeOf'>;`;
+    const userResolversStr = `export type UserResolvers = Pick<Types.UserResolvers, DefinedFields['User']>;`;
     const nbOfTimeUserResolverFound = result[4].content.split(userResolversStr).length - 1;
 
     expect(nbOfTimeUserResolverFound).toBe(1);
@@ -176,7 +176,7 @@ describe('Integration', () => {
 
     // Only Query related properties should be required
     expect(usersModuleOutput.content).toBeSimilarStringTo(`
-      export type UserResolvers = Pick<Types.UserResolvers, DefinedFields['User'] | '__isTypeOf'>;
+      export type UserResolvers = Pick<Types.UserResolvers, DefinedFields['User']>;
       export type QueryResolvers = Required<Pick<Types.QueryResolvers, DefinedFields['Query']>>;
     `);
     expect(usersModuleOutput.content).toBeSimilarStringTo(`
@@ -200,5 +200,69 @@ describe('Integration', () => {
     expect(result[2].content).toMatch(esmImportStatement);
     expect(result[3].content).toMatch(esmImportStatement);
     expect(result[4].content).toMatch(esmImportStatement);
+  });
+
+  test('import paths should use importExtension when set to .mjs', async () => {
+    const withImportExtension = {
+      ...options,
+      importExtension: '.mjs' as const,
+    };
+    const { result } = await executeCodegen(withImportExtension);
+    const importStatement = `import * as Types from "../global-types.mjs";`;
+
+    expect(result.length).toBe(5);
+    expect(result[1].content).toMatch(importStatement);
+    expect(result[2].content).toMatch(importStatement);
+    expect(result[3].content).toMatch(importStatement);
+    expect(result[4].content).toMatch(importStatement);
+  });
+
+  test('import paths should use importExtension when set to empty string', async () => {
+    const withImportExtension = {
+      ...options,
+      importExtension: '' as const,
+    };
+    const { result } = await executeCodegen(withImportExtension);
+    const importStatement = `import * as Types from "../global-types";`;
+
+    expect(result.length).toBe(5);
+    expect(result[1].content).toMatch(importStatement);
+    expect(result[2].content).toMatch(importStatement);
+    expect(result[3].content).toMatch(importStatement);
+    expect(result[4].content).toMatch(importStatement);
+  });
+
+  test('importExtension should override emitLegacyCommonJSImports', async () => {
+    const withBothOptions = {
+      ...options,
+      importExtension: '.mjs' as const,
+      emitLegacyCommonJSImports: false,
+    };
+    const { result } = await executeCodegen(withBothOptions);
+    const importStatement = `import * as Types from "../global-types.mjs";`;
+
+    expect(result.length).toBe(5);
+    // Should use .mjs from importExtension, not .js from emitLegacyCommonJSImports
+    expect(result[1].content).toMatch(importStatement);
+    expect(result[2].content).toMatch(importStatement);
+    expect(result[3].content).toMatch(importStatement);
+    expect(result[4].content).toMatch(importStatement);
+  });
+
+  test('importExtension set to empty string should override emitLegacyCommonJSImports: false', async () => {
+    const withBothOptions = {
+      ...options,
+      importExtension: '' as const,
+      emitLegacyCommonJSImports: false,
+    };
+    const { result } = await executeCodegen(withBothOptions);
+    const importStatement = `import * as Types from "../global-types";`;
+
+    expect(result.length).toBe(5);
+    // Should use empty string from importExtension, not .js from emitLegacyCommonJSImports
+    expect(result[1].content).toMatch(importStatement);
+    expect(result[2].content).toMatch(importStatement);
+    expect(result[3].content).toMatch(importStatement);
+    expect(result[4].content).toMatch(importStatement);
   });
 });

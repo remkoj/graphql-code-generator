@@ -1,5 +1,39 @@
 # @graphql-codegen/cli
 
+## 6.1.0
+
+### Minor Changes
+
+- [#10510](https://github.com/dotansimha/graphql-code-generator/pull/10510) [`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670) Thanks [@nickmessing](https://github.com/nickmessing)! - add importExtension configuration option
+
+### Patch Changes
+
+- Updated dependencies [[`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670)]:
+  - @graphql-codegen/plugin-helpers@6.1.0
+  - @graphql-codegen/client-preset@5.2.0
+
+## 6.0.2
+
+### Patch Changes
+
+- [#10430](https://github.com/dotansimha/graphql-code-generator/pull/10430) [`aad7f03`](https://github.com/dotansimha/graphql-code-generator/commit/aad7f03bf812d671d3c60ff21be0b3b8da55d79f) Thanks [@renovate](https://github.com/apps/renovate)! - dependencies updates:
+  - Updated dependency [`@graphql-tools/github-loader@^9.0.0` ↗︎](https://www.npmjs.com/package/@graphql-tools/github-loader/v/9.0.0) (from `^8.0.0`, in `dependencies`)
+  - Updated dependency [`@graphql-tools/url-loader@^9.0.0` ↗︎](https://www.npmjs.com/package/@graphql-tools/url-loader/v/9.0.0) (from `^8.0.0`, in `dependencies`)
+- Updated dependencies []:
+  - @graphql-codegen/client-preset@5.1.2
+
+## 6.0.1
+
+### Patch Changes
+
+- [#10468](https://github.com/dotansimha/graphql-code-generator/pull/10468) [`cb1b9d9`](https://github.com/dotansimha/graphql-code-generator/commit/cb1b9d99c413a96fde6c9af0b2315b3ad721ee4e) Thanks [@eddeee888](https://github.com/eddeee888)! - In watch mode, do not write output on failure
+
+  Previously, on partial or full failure, watch mode still write to output. However, since the output'd be an empty array, it will then call `removeStaleFiles` internally to remove all previously generated files.
+
+  This patch puts a temporary fix to avoid writing output on any failure to fix the described behaviour.
+
+  This also means the `config.allowPartialOutputs` does not work in watch mode for now.
+
 ## 6.0.0
 
 ### Major Changes

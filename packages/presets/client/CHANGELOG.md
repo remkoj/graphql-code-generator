@@ -1,5 +1,91 @@
 # @graphql-codegen/client-preset
 
+## 5.2.1
+
+### Patch Changes
+
+- Updated dependencies [[`b995ed1`](https://github.com/dotansimha/graphql-code-generator/commit/b995ed13a49379ea05e0e313fac68b557527523a)]:
+  - @graphql-codegen/visitor-plugin-common@6.2.1
+  - @graphql-codegen/gql-tag-operations@5.1.1
+  - @graphql-codegen/typescript-operations@5.0.6
+  - @graphql-codegen/typed-document-node@6.1.4
+  - @graphql-codegen/typescript@5.0.6
+
+## 5.2.0
+
+### Minor Changes
+
+- [#10510](https://github.com/dotansimha/graphql-code-generator/pull/10510) [`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670) Thanks [@nickmessing](https://github.com/nickmessing)! - add importExtension configuration option
+
+### Patch Changes
+
+- Updated dependencies [[`f821e8a`](https://github.com/dotansimha/graphql-code-generator/commit/f821e8ab9351f23a9f7e5d5e6fc69c8e8868cad8), [`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670)]:
+  - @graphql-codegen/visitor-plugin-common@6.2.0
+  - @graphql-codegen/gql-tag-operations@5.1.0
+  - @graphql-codegen/plugin-helpers@6.1.0
+  - @graphql-codegen/typescript-operations@5.0.5
+  - @graphql-codegen/typed-document-node@6.1.3
+  - @graphql-codegen/typescript@5.0.5
+
+## 5.1.3
+
+### Patch Changes
+
+- [#10499](https://github.com/dotansimha/graphql-code-generator/pull/10499) [`51a1a72`](https://github.com/dotansimha/graphql-code-generator/commit/51a1a7280578d43681391df11d320a8416c0b41d) Thanks [@eddeee888](https://github.com/eddeee888)! - Fix nested fragment not getting correct meta field in Client Preset
+
+- Updated dependencies [[`51a1a72`](https://github.com/dotansimha/graphql-code-generator/commit/51a1a7280578d43681391df11d320a8416c0b41d)]:
+  - @graphql-codegen/visitor-plugin-common@6.1.2
+  - @graphql-codegen/gql-tag-operations@5.0.5
+  - @graphql-codegen/typescript-operations@5.0.4
+  - @graphql-codegen/typed-document-node@6.1.2
+  - @graphql-codegen/typescript@5.0.4
+
+## 5.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`6715330`](https://github.com/dotansimha/graphql-code-generator/commit/67153304646694d75aee24afd70c3fce12e9f1f2)]:
+  - @graphql-codegen/visitor-plugin-common@6.1.1
+  - @graphql-codegen/gql-tag-operations@5.0.4
+  - @graphql-codegen/typescript-operations@5.0.3
+  - @graphql-codegen/typed-document-node@6.1.1
+  - @graphql-codegen/typescript@5.0.3
+
+## 5.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`1debf51`](https://github.com/dotansimha/graphql-code-generator/commit/1debf51aa714e2a53256419c549f6770b6c894a6)]:
+  - @graphql-codegen/gql-tag-operations@5.0.3
+
+## 5.1.0
+
+### Minor Changes
+
+- [#10459](https://github.com/dotansimha/graphql-code-generator/pull/10459) [`87184aa`](https://github.com/dotansimha/graphql-code-generator/commit/87184aa240cb6209e7b3ade13aa54da6ff0b3dff) Thanks [@eddeee888](https://github.com/eddeee888)! - Forward immutableTypes to client preset config
+
+## 5.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`8258f1f`](https://github.com/dotansimha/graphql-code-generator/commit/8258f1f6012c106d02ef28bca9ec424f70c4aa26)]:
+  - @graphql-codegen/visitor-plugin-common@6.1.0
+  - @graphql-codegen/gql-tag-operations@5.0.2
+  - @graphql-codegen/typescript-operations@5.0.2
+  - @graphql-codegen/typed-document-node@6.0.2
+  - @graphql-codegen/typescript@5.0.2
+
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`accdab6`](https://github.com/dotansimha/graphql-code-generator/commit/accdab69106605241933e9d66d64dc7077656f30)]:
+  - @graphql-codegen/visitor-plugin-common@6.0.1
+  - @graphql-codegen/gql-tag-operations@5.0.1
+  - @graphql-codegen/typescript-operations@5.0.1
+  - @graphql-codegen/typed-document-node@6.0.1
+  - @graphql-codegen/typescript@5.0.1
+
 ## 5.0.1
 
 ### Patch Changes

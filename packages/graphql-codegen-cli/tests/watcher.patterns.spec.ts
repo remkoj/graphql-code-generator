@@ -19,18 +19,21 @@ vi.mock('@parcel/watcher', () => ({
   }),
 }));
 
-const setupMockWatcher = async (codegenContext: ConstructorParameters<typeof CodegenContext>[0]) => {
-  const { stopWatching } = createWatcher(new CodegenContext(codegenContext), async () => Promise.resolve([]));
+const setupMockWatcher = async (
+  codegenContext: ConstructorParameters<typeof CodegenContext>[0],
+  onNext: Mock = vi.fn().mockResolvedValue([])
+) => {
+  const { stopWatching } = createWatcher(new CodegenContext(codegenContext), onNext);
 
   const dispatchChange = async (path: string) => subscribeCallbackMock(undefined, [{ type: 'update', path }]);
 
   // createWatcher doesn't set up subscription immediately, so we wait for a tick before continuing
-  await new Promise(resolve => setTimeout(resolve, 10));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   return { stopWatching, dispatchChange };
 };
 
-describe('Watch targets', () => {
+describe('Watch patterns', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 

@@ -1112,7 +1112,7 @@ export * from "./gql";`);
           preset,
         },
       },
-      emitLegacyCommonJSImports: false,
+      importExtension: '.js',
     });
 
     expect(result).toHaveLength(4);
@@ -1343,7 +1343,7 @@ export * from "./gql.js";`);
         import * as types from './graphql.js';
         import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 
-        const documents = [];
+        const documents = {};
         /**
          * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
          *
@@ -1367,6 +1367,157 @@ export * from "./gql.js";`);
       // graphql.ts
       const graphqlFile = result.find(file => file.filename === 'out1/gql.ts');
       expect(graphqlFile).toBeDefined();
+    });
+  });
+
+  describe('importExtension configuration', () => {
+    it('generates imports with .mjs extension when importExtension is set to .mjs', async () => {
+      const { result } = await executeCodegen({
+        schema: [
+          /* GraphQL */ `
+            type Query {
+              a: String
+              b: String
+              c: String
+            }
+          `,
+        ],
+        documents: path.join(__dirname, 'fixtures/simple-uppercase-operation-name.ts'),
+        generates: {
+          'out1/': {
+            preset,
+          },
+        },
+        importExtension: '.mjs',
+      });
+
+      expect(result).toHaveLength(4);
+      const indexFile = result.find(file => file.filename === 'out1/index.ts');
+      expect(indexFile.content).toEqual(`export * from "./fragment-masking.mjs";
+export * from "./gql.mjs";`);
+
+      const gqlFile = result.find(file => file.filename === 'out1/gql.ts');
+      expect(gqlFile.content).toContain(`import * as types from './graphql.mjs';`);
+    });
+
+    it('generates imports with no extension when importExtension is empty string', async () => {
+      const { result } = await executeCodegen({
+        schema: [
+          /* GraphQL */ `
+            type Query {
+              a: String
+              b: String
+              c: String
+            }
+          `,
+        ],
+        documents: path.join(__dirname, 'fixtures/simple-uppercase-operation-name.ts'),
+        generates: {
+          'out1/': {
+            preset,
+          },
+        },
+        importExtension: '',
+      });
+
+      expect(result).toHaveLength(4);
+      const indexFile = result.find(file => file.filename === 'out1/index.ts');
+      expect(indexFile.content).toEqual(`export * from "./fragment-masking";
+export * from "./gql";`);
+
+      const gqlFile = result.find(file => file.filename === 'out1/gql.ts');
+      expect(gqlFile.content).toContain(`import * as types from './graphql';`);
+    });
+
+    it('uses importExtension over emitLegacyCommonJSImports when both are set', async () => {
+      const { result } = await executeCodegen({
+        schema: [
+          /* GraphQL */ `
+            type Query {
+              a: String
+              b: String
+              c: String
+            }
+          `,
+        ],
+        documents: path.join(__dirname, 'fixtures/simple-uppercase-operation-name.ts'),
+        generates: {
+          'out1/': {
+            preset,
+          },
+        },
+        importExtension: '.mjs',
+        emitLegacyCommonJSImports: false,
+      });
+
+      expect(result).toHaveLength(4);
+      const indexFile = result.find(file => file.filename === 'out1/index.ts');
+      // Should use .mjs from importExtension, not .js from emitLegacyCommonJSImports: false
+      expect(indexFile.content).toEqual(`export * from "./fragment-masking.mjs";
+export * from "./gql.mjs";`);
+
+      const gqlFile = result.find(file => file.filename === 'out1/gql.ts');
+      expect(gqlFile.content).toContain(`import * as types from './graphql.mjs';`);
+    });
+
+    it('uses importExtension set to empty string even when emitLegacyCommonJSImports is false', async () => {
+      const { result } = await executeCodegen({
+        schema: [
+          /* GraphQL */ `
+            type Query {
+              a: String
+              b: String
+              c: String
+            }
+          `,
+        ],
+        documents: path.join(__dirname, 'fixtures/simple-uppercase-operation-name.ts'),
+        generates: {
+          'out1/': {
+            preset,
+          },
+        },
+        importExtension: '',
+        emitLegacyCommonJSImports: false,
+      });
+
+      expect(result).toHaveLength(4);
+      const indexFile = result.find(file => file.filename === 'out1/index.ts');
+      // Should use empty string from importExtension, not .js from emitLegacyCommonJSImports: false
+      expect(indexFile.content).toEqual(`export * from "./fragment-masking";
+export * from "./gql";`);
+
+      const gqlFile = result.find(file => file.filename === 'out1/gql.ts');
+      expect(gqlFile.content).toContain(`import * as types from './graphql';`);
+    });
+
+    it('generates imports with custom .cjs extension when importExtension is set to .cjs', async () => {
+      const { result } = await executeCodegen({
+        schema: [
+          /* GraphQL */ `
+            type Query {
+              a: String
+              b: String
+              c: String
+            }
+          `,
+        ],
+        documents: path.join(__dirname, 'fixtures/simple-uppercase-operation-name.ts'),
+        generates: {
+          'out1/': {
+            preset,
+          },
+        },
+        importExtension: '.cjs',
+      });
+
+      expect(result).toHaveLength(4);
+      const indexFile = result.find(file => file.filename === 'out1/index.ts');
+      expect(indexFile.content).toEqual(`export * from "./fragment-masking.cjs";
+export * from "./gql.cjs";`);
+
+      const gqlFile = result.find(file => file.filename === 'out1/gql.ts');
+      expect(gqlFile.content).toContain(`import * as types from './graphql.cjs';`);
     });
   });
 
@@ -2289,8 +2440,14 @@ export * from "./gql.js";`);
 
         export type FooFragment = { __typename?: 'Foo', id?: string | null } & ({ __typename?: 'Foo', value?: string | null } | { __typename?: 'Foo', value?: never }) & { ' $fragmentName'?: 'FooFragment' };
 
+        export type FooNestedFragment = { __typename?: 'Foo', id?: string | null } & (
+          { __typename?: 'Foo' }
+          & { ' $fragmentRefs'?: { 'FooFragment': Incremental<FooFragment> } }
+        ) & { ' $fragmentName'?: 'FooNestedFragment' };
+
         export const FooFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]} as unknown as DocumentNode<FooFragment, unknown>;
         export const FooFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<FooFragment, unknown>;
+        export const FooNestedFragmentDoc = {"__meta__":{"deferredFields":{"foo":["id"]}},"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"fooNested"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"foo"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<FooNestedFragment, unknown>;
         export const FooDocument = {"__meta__":{"deferredFields":{"Foo":["value"]}},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Foo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"foo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Foo"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]} as unknown as DocumentNode<FooQuery, FooQueryVariables>;
         export const FoosDocument = {"__meta__":{"deferredFields":{"Foo":["value"]}},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Foos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"foos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Foo"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]} as unknown as DocumentNode<FoosQuery, FoosQueryVariables>;"
       `);
@@ -2374,8 +2531,14 @@ export * from "./gql.js";`);
 
         export type FooFragment = { __typename?: 'Foo', id?: string | null } & ({ __typename?: 'Foo', value?: string | null } | { __typename?: 'Foo', value?: never }) & { ' $fragmentName'?: 'FooFragment' };
 
+        export type FooNestedFragment = { __typename?: 'Foo', id?: string | null } & (
+          { __typename?: 'Foo' }
+          & { ' $fragmentRefs'?: { 'FooFragment': Incremental<FooFragment> } }
+        ) & { ' $fragmentName'?: 'FooNestedFragment' };
+
         export const FooFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]} as unknown as DocumentNode<FooFragment, unknown>;
         export const FooFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<FooFragment, unknown>;
+        export const FooNestedFragmentDoc = {"__meta__":{"deferredFields":{"foo":["id"]}},"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"fooNested"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"foo"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<FooNestedFragment, unknown>;
         export const FooDocument = {"__meta__":{"hash":"39c47d2da0fb0e6867abbe2ec942d9858f2d76c7","deferredFields":{"Foo":["value"]}},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Foo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"foo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Foo"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]} as unknown as DocumentNode<FooQuery, FooQueryVariables>;
         export const FoosDocument = {"__meta__":{"hash":"8aba765173b2302b9857334e9959d97a2168dbc8","deferredFields":{"Foo":["value"]}},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Foos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"foos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Foo"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"defer"}}]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Foo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Foo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]} as unknown as DocumentNode<FoosQuery, FoosQueryVariables>;"
       `);
@@ -2459,6 +2622,11 @@ export * from "./gql.js";`);
 
         export type FooFragment = { __typename?: 'Foo', id?: string | null } & ({ __typename?: 'Foo', value?: string | null } | { __typename?: 'Foo', value?: never }) & { ' $fragmentName'?: 'FooFragment' };
 
+        export type FooNestedFragment = { __typename?: 'Foo', id?: string | null } & (
+          { __typename?: 'Foo' }
+          & { ' $fragmentRefs'?: { 'FooFragment': Incremental<FooFragment> } }
+        ) & { ' $fragmentName'?: 'FooNestedFragment' };
+
         export class TypedDocumentString<TResult, TVariables>
           extends String
           implements DocumentTypeDecoration<TResult, TVariables>
@@ -2490,6 +2658,20 @@ export * from "./gql.js";`);
           }
         }
             \`, {"fragmentName":"foo"}) as unknown as TypedDocumentString<FooFragment, unknown>;
+        export const FooNestedFragmentDoc = new TypedDocumentString(\`
+            fragment fooNested on Foo {
+          id
+          ...foo @defer
+        }
+            fragment Foo on Foo {
+          value
+        }
+        fragment foo on Foo {
+          id
+          ... on Foo @defer {
+            value
+          }
+        }\`, {"fragmentName":"fooNested","deferredFields":{"foo":["id"]}}) as unknown as TypedDocumentString<FooNestedFragment, unknown>;
         export const FooDocument = new TypedDocumentString(\`
             query Foo {
           foo {
@@ -2604,6 +2786,11 @@ export * from "./gql.js";`);
 
         export type FooFragment = { __typename?: 'Foo', id?: string | null } & ({ __typename?: 'Foo', value?: string | null } | { __typename?: 'Foo', value?: never }) & { ' $fragmentName'?: 'FooFragment' };
 
+        export type FooNestedFragment = { __typename?: 'Foo', id?: string | null } & (
+          { __typename?: 'Foo' }
+          & { ' $fragmentRefs'?: { 'FooFragment': Incremental<FooFragment> } }
+        ) & { ' $fragmentName'?: 'FooNestedFragment' };
+
         export class TypedDocumentString<TResult, TVariables>
           extends String
           implements DocumentTypeDecoration<TResult, TVariables>
@@ -2635,6 +2822,20 @@ export * from "./gql.js";`);
           }
         }
             \`, {"fragmentName":"foo"}) as unknown as TypedDocumentString<FooFragment, unknown>;
+        export const FooNestedFragmentDoc = new TypedDocumentString(\`
+            fragment fooNested on Foo {
+          id
+          ...foo @defer
+        }
+            fragment Foo on Foo {
+          value
+        }
+        fragment foo on Foo {
+          id
+          ... on Foo @defer {
+            value
+          }
+        }\`, {"fragmentName":"fooNested","deferredFields":{"foo":["id"]}}) as unknown as TypedDocumentString<FooNestedFragment, unknown>;
         export const FooDocument = new TypedDocumentString(\`
             query Foo {
           foo {
@@ -3189,5 +3390,86 @@ export * from "./gql.js";`);
       };
 
       export { Color };`);
+  });
+
+  it('supports immutableTypes', async () => {
+    const { result } = await executeCodegen({
+      schema: [
+        /* GraphQL */ `
+          type Query {
+            user(id: ID!): User
+          }
+          type User {
+            id: ID!
+            name: String!
+            friends: [User!]!
+          }
+        `,
+      ],
+      documents: [
+        /* GraphQL */ `
+          query Test_User {
+            user(id: "user-001") {
+              id
+              name
+            }
+          }
+        `,
+      ],
+      generates: {
+        'out1/': {
+          preset,
+          config: {
+            immutableTypes: true,
+          },
+        },
+      },
+    });
+
+    const graphqlFile = result.find(file => file.filename === 'out1/graphql.ts');
+    expect(graphqlFile.content).toMatchInlineSnapshot(`
+      "/* eslint-disable */
+      import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+      export type Maybe<T> = T | null;
+      export type InputMaybe<T> = T | null | undefined;
+      export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+      export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+      export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+      export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+      export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+      /** All built-in and custom scalars, mapped to their actual values */
+      export type Scalars = {
+        ID: { input: string; output: string; }
+        String: { input: string; output: string; }
+        Boolean: { input: boolean; output: boolean; }
+        Int: { input: number; output: number; }
+        Float: { input: number; output: number; }
+      };
+
+      export type Query = {
+        readonly __typename?: 'Query';
+        readonly user?: Maybe<User>;
+      };
+
+
+      export type QueryUserArgs = {
+        id: Scalars['ID']['input'];
+      };
+
+      export type User = {
+        readonly __typename?: 'User';
+        readonly friends: ReadonlyArray<User>;
+        readonly id: Scalars['ID']['output'];
+        readonly name: Scalars['String']['output'];
+      };
+
+      export type Test_UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+      export type Test_UserQuery = { readonly __typename?: 'Query', readonly user?: { readonly __typename?: 'User', readonly id: string, readonly name: string } | null };
+
+
+      export const Test_UserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Test_User"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"StringValue","value":"user-001","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<Test_UserQuery, Test_UserQueryVariables>;"
+    `);
   });
 });

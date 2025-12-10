@@ -48,7 +48,7 @@
     "@babel/preset-typescript": "7.27.1",
     "@changesets/changelog-github": "0.5.1",
     "@changesets/cli": "2.29.6",
-    "@theguild/eslint-config": "0.13.4",
+    "@theguild/eslint-config": "0.13.3",
     "@theguild/prettier-config": "0.1.1",
     "bob-the-bundler": "7.0.1",
     "cross-env": "7.0.3",
@@ -68,7 +68,7 @@
     "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.2.4",
+    "vitest": "4.0.4",
     "wrangler": "4.1.0"
   },
   "lint-staged": {

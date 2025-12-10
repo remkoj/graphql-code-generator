@@ -1,5 +1,65 @@
 # @graphql-codegen/visitor-plugin-common
 
+## 6.2.1
+
+### Patch Changes
+
+- [#10503](https://github.com/dotansimha/graphql-code-generator/pull/10503) [`b995ed1`](https://github.com/dotansimha/graphql-code-generator/commit/b995ed13a49379ea05e0e313fac68b557527523a) Thanks [@Georgegriff](https://github.com/Georgegriff)! - Use parent type name on interface types without fragments
+
+## 6.2.0
+
+### Minor Changes
+
+- [#10510](https://github.com/dotansimha/graphql-code-generator/pull/10510) [`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670) Thanks [@nickmessing](https://github.com/nickmessing)! - add importExtension configuration option
+
+### Patch Changes
+
+- [#10512](https://github.com/dotansimha/graphql-code-generator/pull/10512) [`f821e8a`](https://github.com/dotansimha/graphql-code-generator/commit/f821e8ab9351f23a9f7e5d5e6fc69c8e8868cad8) Thanks [@realies](https://github.com/realies)! - fix: allow mappers to override root types (Query, Mutation, Subscription)
+
+  Previously, mappers configured for root types were ignored because root types were checked before mappers. This fix moves the mapper check before the root type check, allowing mappers to override `rootValueType` when configured.
+
+- Updated dependencies [[`9e70bcb`](https://github.com/dotansimha/graphql-code-generator/commit/9e70bcbf5390e815a6844f1965b04056e5d8e670)]:
+  - @graphql-codegen/plugin-helpers@6.1.0
+
+## 6.1.2
+
+### Patch Changes
+
+- [#10499](https://github.com/dotansimha/graphql-code-generator/pull/10499) [`51a1a72`](https://github.com/dotansimha/graphql-code-generator/commit/51a1a7280578d43681391df11d320a8416c0b41d) Thanks [@eddeee888](https://github.com/eddeee888)! - Fix nested fragment not getting correct meta field in Client Preset
+
+## 6.1.1
+
+### Patch Changes
+
+- [#10498](https://github.com/dotansimha/graphql-code-generator/pull/10498) [`6715330`](https://github.com/dotansimha/graphql-code-generator/commit/67153304646694d75aee24afd70c3fce12e9f1f2) Thanks [@ardatan](https://github.com/ardatan)! - Handle schema extension nodes correctly
+
+  When a schema doesn't have an operation type defined but has `schema extension` definitions with directives like below,
+  schema extensions are not converted to schema definitions by GraphQL Tools.
+  So the visitor should handle schema extension nodes correctly.
+
+  Follow-up to https://github.com/ardatan/graphql-tools/pull/7679
+
+  ```graphql
+  extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key"])
+
+  type Foo {
+    id: ID! @key
+    name: String
+  }
+  ```
+
+## 6.1.0
+
+### Minor Changes
+
+- [#10449](https://github.com/dotansimha/graphql-code-generator/pull/10449) [`8258f1f`](https://github.com/dotansimha/graphql-code-generator/commit/8258f1f6012c106d02ef28bca9ec424f70c4aa26) Thanks [@eddeee888](https://github.com/eddeee888)! - Add addInterfaceFieldResolverTypes option to support custom Interface resolver inheritance
+
+## 6.0.1
+
+### Patch Changes
+
+- [#10412](https://github.com/dotansimha/graphql-code-generator/pull/10412) [`accdab6`](https://github.com/dotansimha/graphql-code-generator/commit/accdab69106605241933e9d66d64dc7077656f30) Thanks [@thekevinbrown](https://github.com/thekevinbrown)! - Add special handling for identifiers that consist entirely of _ characters when transformUnderscore is true. This prevents _ values in GraphQL enums from being emitted without identifers in the resulting types.
+
 ## 6.0.0
 
 ### Major Changes

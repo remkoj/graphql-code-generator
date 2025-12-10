@@ -65,6 +65,7 @@ export interface ParsedResolversConfig extends ParsedConfig {
   defaultMapper: ParsedMapper | null;
   avoidOptionals: NormalizedAvoidOptionalsConfig;
   addUnderscoreToArgsType: boolean;
+  addInterfaceFieldResolverTypes: boolean;
   enumValues: ParsedEnumValuesMap;
   resolverTypeWrapperSignature: string;
   federation: boolean;
@@ -684,6 +685,40 @@ export interface RawResolversConfig extends RawConfig {
    */
   avoidCheckingAbstractTypesRecursively?: boolean;
   /**
+   * @description If true, add field resolver types to Interfaces.
+   * By default, GraphQL Interfaces do not trigger any field resolvers,
+   * meaning every implementing type must implement the same resolver for the shared fields.
+   *
+   * Some tools provide a way to change the default behaviour by making GraphQL Objects inherit
+   * missing resolvers from their Interface types. In these cases, it is fine to turn this option to true.
+   *
+   * For example, if you are using `@graphql-tools/schema#makeExecutableSchema` with `inheritResolversFromInterfaces: true`,
+   * you can make `addInterfaceFieldResolverTypes: true` as well
+   * https://the-guild.dev/graphql/tools/docs/generate-schema#makeexecutableschema
+   *
+   * @exampleMarkdown
+   * ```ts filename="codegen.ts"
+   * import type { CodegenConfig } from '@graphql-codegen/cli';
+   *
+   * const config: CodegenConfig = {
+   *   // ...
+   *   generates: {
+   *     'path/to/file': {
+   *       plugins: ['typescript', 'typescript-resolver'],
+   *       config: {
+   *         addInterfaceFieldResolverTypes: true,
+   *       },
+   *     },
+   *   },
+   * };
+   * export default config;
+   * ```
+   *
+   * @type boolean
+   * @default false
+   */
+  addInterfaceFieldResolverTypes?: boolean;
+  /**
    * @ignore
    */
   directiveResolverMappings?: Record<string, string>;
@@ -769,6 +804,7 @@ export class BaseResolversVisitor<
         mapOrStr: rawConfig.enumValues,
       }),
       addUnderscoreToArgsType: getConfigValue(rawConfig.addUnderscoreToArgsType, false),
+      addInterfaceFieldResolverTypes: getConfigValue(rawConfig.addInterfaceFieldResolverTypes, false),
       contextType: parseMapper(rawConfig.contextType || 'any', 'ContextType'),
       fieldContextTypes: getConfigValue(rawConfig.fieldContextTypes, []),
       directiveContextTypes: getConfigValue(rawConfig.directiveContextTypes, []),
@@ -935,15 +971,20 @@ export class BaseResolversVisitor<
       const isScalar = this.config.scalars[typeName];
       const hasDefaultMapper = !!this.config.defaultMapper?.type;
 
+      // Check for mappers first, even for root types, to allow overriding rootValueType
+      if (isMapped && this.config.mappers[typeName].type && !hasPlaceholder(this.config.mappers[typeName].type)) {
+        this.markMapperAsUsed(typeName);
+        prev[typeName] = applyWrapper(this.config.mappers[typeName].type);
+
+        return prev;
+      }
+
       if (isRootType) {
         prev[typeName] = applyWrapper(this.config.rootValueType.type);
 
         return prev;
       }
-      if (isMapped && this.config.mappers[typeName].type && !hasPlaceholder(this.config.mappers[typeName].type)) {
-        this.markMapperAsUsed(typeName);
-        prev[typeName] = applyWrapper(this.config.mappers[typeName].type);
-      } else if (isEnumType(schemaType) && this.config.enumValues[typeName]) {
+      if (isEnumType(schemaType) && this.config.enumValues[typeName]) {
         const isExternalFile = !!this.config.enumValues[typeName].sourceFile;
         prev[typeName] = isExternalFile
           ? this.convertName(this.config.enumValues[typeName].typeIdentifier, {
@@ -2015,7 +2056,7 @@ export class BaseResolversVisitor<
       printContent(node, this.config.avoidOptionals.resolvers)
     );
     for (const field of fields) {
-      if (field.meta.federation?.isResolveReference) {
+      if (field.meta.federation?.isResolveReference || this.config.addInterfaceFieldResolverTypes) {
         blockFields.push(field.value);
       }
     }
@@ -2028,6 +2069,10 @@ export class BaseResolversVisitor<
   }
 
   SchemaDefinition() {
+    return null;
+  }
+
+  SchemaExtension() {
     return null;
   }
 
