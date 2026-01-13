@@ -207,6 +207,8 @@ export interface RawClientSideBasePluginConfig extends RawConfig {
    * @description If set to true, it will enable support for parsing variables on fragments.
    */
   experimentalFragmentVariables?: boolean;
+  experimentalAddDocumentNodeType?: boolean;
+  rawString?: boolean;
 }
 
 export interface ClientSideBasePluginConfig extends ParsedConfig {
@@ -229,6 +231,8 @@ export interface ClientSideBasePluginConfig extends ParsedConfig {
   experimentalFragmentVariables?: boolean;
   unstable_onExecutableDocumentNode?: Unstable_OnExecutableDocumentNode;
   unstable_omitDefinitions?: boolean;
+  experimentalAddDocumentNodeType?: boolean;
+  rawString?: boolean;
 }
 
 type ExecutableDocumentNodeMeta = Record<string, unknown>;
@@ -274,6 +278,8 @@ export class ClientSideBaseVisitor<
       importDocumentNodeExternallyFrom: getConfigValue(rawConfig.importDocumentNodeExternallyFrom, ''),
       pureMagicComment: getConfigValue(rawConfig.pureMagicComment, false),
       experimentalFragmentVariables: getConfigValue(rawConfig.experimentalFragmentVariables, false),
+      experimentalAddDocumentNodeType: getConfigValue(rawConfig.experimentalAddDocumentNodeType, false),
+      rawString: getConfigValue(rawConfig.rawString, false),
       ...additionalConfig,
     } as any);
     this._documents = documents;
@@ -296,6 +302,8 @@ export class ClientSideBaseVisitor<
     const names: Set<string> = new Set();
     const toExclude = ignoredFragments || new Set<string>();
 
+    if (toExclude.has(document.name.value)) return Array.from(names);
+
     // We're trying to prevent both duplicate fragments and endless loops, hence
     // if the current document is a fragment, we must not list it in the
     // fragments being used.
@@ -305,7 +313,11 @@ export class ClientSideBaseVisitor<
     oldVisit(document, {
       enter: {
         FragmentSpread: (node: FragmentSpreadNode) => {
-          if (toExclude.has(node.name.value)) return;
+          if (toExclude.has(node.name.value)) {
+            names.delete(node.name.value);
+            names.add(node.name.value);
+            return;
+          }
           names.add(node.name.value);
           toExclude.add(node.name.value);
 
@@ -325,7 +337,7 @@ export class ClientSideBaseVisitor<
         },
       },
     });
-
+    if (document?.name?.value && names.has(document.name.value)) names.delete(document.name.value);
     return Array.from(names);
   }
 
@@ -358,6 +370,7 @@ export class ClientSideBaseVisitor<
     const includeNestedFragments =
       this.config.documentMode === DocumentMode.documentNode || this.config.documentMode === DocumentMode.string;
     const fragmentNames = this._extractFragments(node, includeNestedFragments);
+
     const fragments = this._transformFragments(fragmentNames);
 
     const doc = this._prepareDocument(`
@@ -388,6 +401,11 @@ export class ClientSideBaseVisitor<
       for (const fragmentName of fragmentNames) {
         fragmentDependencyNames.add(fragmentName);
       }
+
+      // Ensure the current fragment is not part of the dependency names, as
+      // the generic code assumes that the cyclical check has been enabled.
+      if (node.name?.value && fragmentDependencyNames.has(node.name.value))
+        fragmentDependencyNames.delete(node.name.value);
 
       const jsonStringify = (json: unknown) =>
         JSON.stringify(json, (key, value) => (key === 'loc' ? undefined : value));
@@ -424,6 +442,7 @@ export class ClientSideBaseVisitor<
     }
 
     if (this.config.documentMode === DocumentMode.string) {
+      if (this.config.rawString) return `\`${doc}\``;
       if (node.kind === Kind.FRAGMENT_DEFINITION) {
         const meta = this._getGraphQLCodegenMetadata(node, gqlTag([doc]).definitions);
 
@@ -506,7 +525,13 @@ export class ClientSideBaseVisitor<
   protected _generateFragment(fragmentDocument: FragmentDefinitionNode): string | void {
     const name = this.getFragmentVariableName(fragmentDocument);
     const fragmentTypeSuffix = this.getFragmentSuffix(fragmentDocument);
-    return `export const ${name} =${this.config.pureMagicComment ? ' /*#__PURE__*/' : ''} ${this._gql(
+    return `export const ${name}${
+      this.config.experimentalAddDocumentNodeType
+        ? ` : DocumentNode<${
+            this.config.importOperationTypesFrom ? this.config.importOperationTypesFrom + '.' : ''
+          }${this.getFragmentName(fragmentDocument)}, unknown>`
+        : ''
+    } =${this.config.pureMagicComment ? ' /*#__PURE__*/' : ''} ${this._gql(
       fragmentDocument
     )}${this.getDocumentNodeSignature(
       this.convertName(fragmentDocument.name.value, {
@@ -533,9 +558,9 @@ export class ClientSideBaseVisitor<
         if (cachedAsString !== asString) {
           throw new Error(`Duplicated fragment called '${fragment.name}'!`);
         }
+      } else {
+        graph.addNode(fragment.name, fragment);
       }
-
-      graph.addNode(fragment.name, fragment);
     }
 
     for (const fragment of this._fragments.values()) {
@@ -627,6 +652,15 @@ export class ClientSideBaseVisitor<
   }
 
   public getImports(options: { excludeFragments?: boolean } = {}): string[] {
+    if (this.config.experimentalAddDocumentNodeType) {
+      this._imports.add(
+        this._generateImport(
+          { moduleName: '@graphql-typed-document-node/core', propName: 'TypedDocumentNode' },
+          'DocumentNode',
+          true
+        )
+      );
+    }
     for (const i of this._additionalImports || []) {
       this._imports.add(i);
     }

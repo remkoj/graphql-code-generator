@@ -11,7 +11,7 @@
     "clean": "rimraf node_modules/",
     "prebuild": "rimraf dist/ .bob/ tsconfig.tsbuildinfo",
     "build": "bob build",
-    "postbuild": "yarn fix-bins",
+    "postbuild": "yarn fix-bins && mkdir dist/",
     "watch-build": "npx tsc-watch --project tsconfig.json --onSuccess \"bob build\"",
     "rebuild": "bob build --incremental",
     "test": "vitest",
